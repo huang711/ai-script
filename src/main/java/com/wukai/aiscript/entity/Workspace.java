@@ -1,4 +1,4 @@
-package com.wukai.aiscript.entity; // 确认你的包名
+package com.wukai.aiscript.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
@@ -10,8 +10,7 @@ public class Workspace {
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
-    private String name; // 空间名称，如 "吴凯的工作室"
-
+    private String name; // 空间名称，如 "吴凯楷的AI工作室"
     private Long ownerId; // 创建人ID
 
     private String type; // 类型：PERSONAL(个人), TEAM(团队)

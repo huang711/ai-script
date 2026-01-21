@@ -21,24 +21,25 @@ public class WorkspaceService {
 
     /**
      * 创建空间
-     * @param userId 创建人的ID (从 Token 中获取)
-     * @param name 空间名称
      */
-    @Transactional(rollbackFor = Exception.class) // 开启事务：任何一步报错，全部回滚
+    @Transactional(rollbackFor = Exception.class)
     public Workspace createWorkspace(Long userId, String name) {
         // 1. 插入空间表
         Workspace workspace = new Workspace();
         workspace.setName(name);
         workspace.setOwnerId(userId);
-        workspace.setType("TEAM"); // 默认为团队版
+        workspace.setType("TEAM");
         workspace.setCreateTime(LocalDateTime.now());
         workspaceMapper.insert(workspace);
 
-        // 2. 插入成员表 (把自己设为 Owner - 角色1)
+        // 2. 插入成员表
         WorkspaceMember member = new WorkspaceMember();
-        member.setWorkspaceId(workspace.getId()); // 获取刚才生成的 ID
+        member.setWorkspaceId(workspace.getId());
         member.setUserId(userId);
-        member.setRole(1); // 1 代表拥有者
+
+        // 【修正点】：将 1 改为 10 (根据 SQL 定义：1=Editor, 10=Owner)
+        member.setRole(10);
+
         member.setJoinTime(LocalDateTime.now());
         memberMapper.insert(member);
 
