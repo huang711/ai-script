@@ -37,7 +37,7 @@ public class WorkspaceService {
         member.setWorkspaceId(workspace.getId());
         member.setUserId(userId);
 
-        // 【修正点】：将 1 改为 10 (根据 SQL 定义：1=Editor, 10=Owner)
+        //角色: 1=Editor, 9=Admin, 10=Owner)
         member.setRole(10);
 
         member.setJoinTime(LocalDateTime.now());

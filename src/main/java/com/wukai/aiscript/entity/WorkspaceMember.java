@@ -10,11 +10,16 @@ public class WorkspaceMember {
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
-    private Long workspaceId; // 关联哪个空间
+    private Long workspaceId;
 
-    private Long userId; // 关联哪个用户
+    private Long userId;
 
-    // 角色：1=Owner(拥有者), 2=Admin(管理员), 3=Editor(编辑), 4=Viewer(只读)
+    /**
+     * 角色定义:
+     * 1 = Editor (编辑)
+     * 9 = Admin (管理员)
+     * 10 = Owner (拥有者)
+     */
     private Integer role;
 
     @TableField(fill = FieldFill.INSERT)

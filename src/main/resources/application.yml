@@ -7,29 +7,29 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    # ???????
+    # 数据库连接配置
     url: jdbc:mysql://localhost:3306/ai_drama_saas?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: 2024309105
 
-  # ?? Spring Boot ???? Swagger/Knife4j ??????
+  # 解决 Spring Boot 高版本与 Swagger/Knife4j 的路径匹配兼容性问题
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
 
 mybatis-plus:
-  # ??????
+  # 实体类别名包路径
   type-aliases-package: com.wukai.aiscript.entity
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # ?? SQL ??
-    map-underscore-to-camel-case: true # ????????
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开启控制台打印 SQL
+    map-underscore-to-camel-case: true # 开启驼峰命名转换
   global-config:
     db-config:
-      id-type: assign_id # ???? ID
+      id-type: assign_id # 雪花算法生成 ID
       logic-delete-value: 1
       logic-not-delete-value: 0
 
-# JWT ?? (????????????????????????)
+# JWT 配置 (读取这里的配置，不再写死在代码里)
 jwt:
-  secret: wukai_ai_drama_saas_secret_key_2024 # ??
-  expire: 604800000 # 7?
+  secret: wukai_ai_drama_saas_secret_key_2024 # 密钥
+  expire: 604800000 # 7天
