@@ -1,20 +1,20 @@
 package com.wukai.aiscript.utils;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
-@Component // 1. 加上这个注解，让 Spring 能够管理它
+@Component
 public class JwtUtils {
 
-    // 静态变量，用于在静态方法中使用
     private static String SECRET_KEY;
     private static long EXPIRE;
 
-    // 2. 使用非静态的 Setter 方法注入配置，并赋值给静态变量
     @Value("${jwt.secret}")
     public void setSecretKey(String secretKey) {
         JwtUtils.SECRET_KEY = secretKey;
@@ -27,15 +27,47 @@ public class JwtUtils {
 
     /**
      * 生成 Token
-     * 注意：这里依然保持 static，这样您之前的 AuthService 代码就不用改了
      */
     public static String generateToken(Long userId, String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("userId", userId)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRE)) // 使用读取到的配置
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY) // 使用读取到的配置
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRE))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
+    }
+
+    /**
+     * 【新增】解析 Token 获取 Claims 载荷
+     */
+    public static Claims getClaimsByToken(String token) {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            // 解析失败（过期或篡改）
+            return null;
+        }
+    }
+
+    /**
+     * 【新增】从 Token 中获取用户 ID
+     */
+    public static Long getUserId(String token) {
+        Claims claims = getClaimsByToken(token);
+        if (claims != null) {
+            return Long.parseLong(claims.get("userId").toString());
+        }
+        return null;
+    }
+
+    /**
+     * 【新增】校验 Token 是否有效
+     */
+    public static boolean validateToken(String token) {
+        return getClaimsByToken(token) != null;
     }
 }

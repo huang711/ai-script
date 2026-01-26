@@ -29,7 +29,7 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 
-# JWT 配置 (读取这里的配置，不再写死在代码里)
+# JWT 配置
 jwt:
-  secret: wukai_ai_drama_saas_secret_key_2024 # 密钥
+  secret: wukai_ai_drama_saas_secret_key_2026 # 密钥
   expire: 604800000 # 7天

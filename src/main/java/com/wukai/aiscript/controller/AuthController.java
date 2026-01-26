@@ -1,6 +1,6 @@
 package com.wukai.aiscript.controller;
 
-import com.wukai.aiscript.common.Result; // 1. 引入新类
+import com.wukai.aiscript.common.Result;
 import com.wukai.aiscript.dto.LoginRequest;
 import com.wukai.aiscript.dto.RegisterRequest;
 import com.wukai.aiscript.service.AuthService;
@@ -15,12 +15,12 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public Result<String> register(@RequestBody RegisterRequest req) { // 2. 返回 Result
+    public Result<String> register(@RequestBody RegisterRequest req) {
         try {
             String result = authService.register(req);
-            return Result.success(result); // 3. 使用 success
+            return Result.success(result);
         } catch (Exception e) {
-            return Result.failed(e.getMessage()); // 4. 使用 failed
+            return Result.failed(e.getMessage());
         }
     }
 

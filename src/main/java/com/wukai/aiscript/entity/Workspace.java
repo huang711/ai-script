@@ -10,7 +10,7 @@ public class Workspace {
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
-    private String name; // 空间名称，如 "吴凯楷的AI工作室"
+    private String name; // 空间名称，如 "吴楷的AI工作室"
     private Long ownerId; // 创建人ID
 
     private String type; // 类型：PERSONAL(个人), TEAM(团队)
