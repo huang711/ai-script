@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.workspace.mapper.WorkspaceMembersMapper">
+    
+    <resultMap type="WorkspaceMembers" id="WorkspaceMembersResult">
+        <result property="id"    column="id"    />
+        <result property="workspaceId"    column="workspace_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="role"    column="role"    />
+        <result property="joinTime"    column="join_time"    />
+    </resultMap>
+
+    <sql id="selectWorkspaceMembersVo">
+        select id, workspace_id, user_id, role, join_time from workspace_members
+    </sql>
+
+    <select id="selectWorkspaceMembersList" parameterType="WorkspaceMembers" resultMap="WorkspaceMembersResult">
+        <include refid="selectWorkspaceMembersVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="workspaceId != null "> and workspace_id = #{workspaceId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="role != null "> and role = #{role}</if>
+            <if test="params.beginJoinTime != null and params.beginJoinTime != '' and params.endJoinTime != null and params.endJoinTime != ''"> and join_time between #{params.beginJoinTime} and #{params.endJoinTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectWorkspaceMembersById" parameterType="Long" resultMap="WorkspaceMembersResult">
+        <include refid="selectWorkspaceMembersVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertWorkspaceMembers" parameterType="WorkspaceMembers" useGeneratedKeys="true" keyProperty="id">
+        insert into workspace_members
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">workspace_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="role != null">role,</if>
+            <if test="joinTime != null">join_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">#{workspaceId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="role != null">#{role},</if>
+            <if test="joinTime != null">#{joinTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWorkspaceMembers" parameterType="WorkspaceMembers">
+        update workspace_members
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workspaceId != null">workspace_id = #{workspaceId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="role != null">role = #{role},</if>
+            <if test="joinTime != null">join_time = #{joinTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWorkspaceMembersById" parameterType="Long">
+        delete from workspace_members where id = #{id}
+    </delete>
+
+    <delete id="deleteWorkspaceMembersByIds" parameterType="String">
+        delete from workspace_members where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

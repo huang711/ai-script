@@ -10,6 +10,7 @@
     </template>
     <div class="right-menu">
       <template v-if="device!=='mobile'">
+        <workspace-select class="right-menu-item" />
         <search id="header-search" class="right-menu-item" />
 
         <el-tooltip content="源码地址" effect="dark" placement="bottom">
@@ -59,6 +60,7 @@ import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
+import WorkspaceSelect from '@/components/WorkspaceSelect'
 import RuoYiGit from '@/components/RuoYi/Git'
 import RuoYiDoc from '@/components/RuoYi/Doc'
 
@@ -73,6 +75,7 @@ export default {
     Screenfull,
     SizeSelect,
     Search,
+    WorkspaceSelect,
     RuoYiGit,
     RuoYiDoc
   },

@@ -23,6 +23,8 @@ import com.ruoyi.framework.web.service.SysPermissionService;
 import com.ruoyi.framework.web.service.TokenService;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysMenuService;
+import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.workspace.service.IWorkspacesService;
 
 /**
  * 登录验证
@@ -47,6 +49,12 @@ public class SysLoginController
     @Autowired
     private ISysConfigService configService;
 
+    @Autowired
+    private ISysUserService userService;
+
+    @Autowired
+    private IWorkspacesService workspacesService;
+
     /**
      * 登录方法
      * 
@@ -60,6 +68,13 @@ public class SysLoginController
         // 生成令牌
         String token = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(),
                 loginBody.getUuid());
+        
+        // 自动创建个人空间
+        SysUser user = userService.selectUserByUserName(loginBody.getUsername());
+        if (user != null) {
+            workspacesService.initPersonalWorkspace(user.getUserId());
+        }
+
         ajax.put(Constants.TOKEN, token);
         return ajax;
     }
