@@ -34,7 +34,7 @@ service.interceptors.request.use(config => {
   
   // 工作空间上下文
   const workspaceId = localStorage.getItem('workspaceId')
-  if (workspaceId) {
+  if (workspaceId && !config.headers['X-Workspace-Id']) {
     config.headers['X-Workspace-Id'] = workspaceId
   }
 

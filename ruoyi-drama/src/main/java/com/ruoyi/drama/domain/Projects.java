@@ -21,6 +21,10 @@ public class Projects extends BaseEntity
     /** 空间ID */
     private Long workspaceId;
 
+    /** 类型(personal/team) */
+    @Excel(name = "类型")
+    private String type;
+
     /** 创作者ID */
     private Long creatorId;
 
@@ -50,6 +54,16 @@ public class Projects extends BaseEntity
     public Long getWorkspaceId() 
     {
         return workspaceId;
+    }
+
+    public void setType(String type) 
+    {
+        this.type = type;
+    }
+
+    public String getType() 
+    {
+        return type;
     }
 
     public void setCreatorId(Long creatorId) 
@@ -87,6 +101,7 @@ public class Projects extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
             .append("workspaceId", getWorkspaceId())
+            .append("type", getType())
             .append("creatorId", getCreatorId())
             .append("name", getName())
             .append("status", getStatus())

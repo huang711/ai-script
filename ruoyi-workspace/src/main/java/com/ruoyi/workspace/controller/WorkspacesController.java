@@ -42,6 +42,10 @@ public class WorkspacesController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(Workspaces workspaces)
     {
+        // 如果不是管理员，强制只查询自己的空间
+        if (!SecurityUtils.isAdmin()) {
+            workspaces.setOwnerId(SecurityUtils.getUserId());
+        }
         startPage();
         List<Workspaces> list = workspacesService.selectWorkspacesList(workspaces);
         return getDataTable(list);

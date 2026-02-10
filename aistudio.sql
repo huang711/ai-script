@@ -213,6 +213,7 @@ DROP TABLE IF EXISTS `projects`;
 CREATE TABLE `projects`  (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `workspace_id` bigint NOT NULL,
+  `type` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '类型(personal/team)',
   `creator_id` bigint NOT NULL,
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '项目名',
   `status` tinyint NULL DEFAULT 1 COMMENT '状态(1进行/2归档)',

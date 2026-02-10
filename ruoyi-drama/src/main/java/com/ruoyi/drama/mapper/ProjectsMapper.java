@@ -2,6 +2,7 @@ package com.ruoyi.drama.mapper;
 
 import java.util.List;
 import com.ruoyi.drama.domain.Projects;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 项目管理Mapper接口
@@ -9,6 +10,7 @@ import com.ruoyi.drama.domain.Projects;
  * @author wukai
  * @date 2026-02-10
  */
+
 public interface ProjectsMapper 
 {
     /**

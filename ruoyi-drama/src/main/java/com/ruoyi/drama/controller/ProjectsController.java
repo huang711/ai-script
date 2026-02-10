@@ -116,4 +116,15 @@ public class ProjectsController extends BaseController
     {
         return toAjax(projectsService.deleteProjectsByIds(ids));
     }
+
+    /**
+     * 将项目移动到团队空间
+     */
+    @PreAuthorize("@ss.hasPermi('drama:projects:edit')")
+    @Log(title = "移动项目", businessType = BusinessType.UPDATE)
+    @PostMapping("/{id}/move-to-team")
+    public AjaxResult moveToTeam(@PathVariable Long id)
+    {
+        return toAjax(projectsService.moveToTeam(id));
+    }
 }

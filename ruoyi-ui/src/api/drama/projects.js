@@ -42,3 +42,11 @@ export function delProjects(id) {
     method: 'delete'
   })
 }
+
+// 移动项目到团队空间
+export function moveToTeam(id) {
+  return request({
+    url: '/drama/projects/' + id + '/move-to-team',
+    method: 'post'
+  })
+}

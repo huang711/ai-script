@@ -58,4 +58,12 @@ public interface IProjectsService
      * @return 结果
      */
     public int deleteProjectsById(Long id);
+
+    /**
+     * 将项目移动到团队空间
+     * 
+     * @param id 项目ID
+     * @return 结果
+     */
+    public int moveToTeam(Long id);
 }

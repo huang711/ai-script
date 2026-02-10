@@ -60,9 +60,9 @@ public interface IWorkspacesService
     public int deleteWorkspacesById(Long id);
 
     /**
-     * 初始化个人空间
+     * 初始化用户空间（个人+团队）
      * 
      * @param userId 用户ID
      */
-    public void initPersonalWorkspace(Long userId);
+    public void initUserWorkspaces(Long userId);
 }

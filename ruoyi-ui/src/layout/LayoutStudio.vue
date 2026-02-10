@@ -5,12 +5,8 @@
       <div class="header-left">
         <router-link to="/studio/dashboard" class="logo-link">
           <img v-if="logo" :src="logo" class="logo-img" />
-          <h1 class="logo-title">AI Studio</h1>
+          <h1 class="logo-title">工作空间</h1>
         </router-link>
-      </div>
-      
-      <div class="header-center">
-        <workspace-select />
       </div>
       
       <div class="header-right">
@@ -42,14 +38,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import WorkspaceSelect from '@/components/WorkspaceSelect'
 import logoImg from '@/assets/logo/logo.png'
 
 export default {
   name: 'LayoutStudio',
-  components: {
-    WorkspaceSelect
-  },
   data() {
     return {
       logo: logoImg
@@ -79,13 +71,13 @@ export default {
 <style lang="scss" scoped>
 .studio-layout {
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background-color: #f7f9fb;
   display: flex;
   flex-direction: column;
 }
 
 .studio-header {
-  height: 60px;
+  height: 50px;
   background: #fff;
   border-bottom: 1px solid #dcdfe6;
   display: flex;
@@ -145,8 +137,8 @@ export default {
 
         .user-avatar {
           cursor: pointer;
-          width: 40px;
-          height: 40px;
+          width: 32px;
+          height: 32px;
           border-radius: 10px;
         }
 
@@ -154,7 +146,7 @@ export default {
           cursor: pointer;
           position: absolute;
           right: -20px;
-          top: 25px;
+          top: 20px;
           font-size: 12px;
         }
       }

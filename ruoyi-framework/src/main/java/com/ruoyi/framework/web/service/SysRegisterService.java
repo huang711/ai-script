@@ -18,6 +18,11 @@ import com.ruoyi.framework.manager.AsyncManager;
 import com.ruoyi.framework.manager.factory.AsyncFactory;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.system.mapper.SysUserRoleMapper;
+import com.ruoyi.system.domain.SysUserRole;
+import com.ruoyi.workspace.service.IWorkspacesService;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 注册校验方法
@@ -29,6 +34,12 @@ public class SysRegisterService
 {
     @Autowired
     private ISysUserService userService;
+
+    @Autowired
+    private SysUserRoleMapper userRoleMapper;
+
+    @Autowired
+    private IWorkspacesService workspacesService;
 
     @Autowired
     private ISysConfigService configService;
@@ -86,6 +97,17 @@ public class SysRegisterService
             }
             else
             {
+                // 新增用户与角色管理（默认赋予普通用户角色，Role ID = 2）
+                SysUserRole ur = new SysUserRole();
+                ur.setUserId(sysUser.getUserId());
+                ur.setRoleId(2L);
+                List<SysUserRole> list = new ArrayList<SysUserRole>();
+                list.add(ur);
+                userRoleMapper.batchUserRole(list);
+
+                // 初始化用户空间（个人+团队）
+                workspacesService.initUserWorkspaces(sysUser.getUserId());
+
                 AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.REGISTER, MessageUtils.message("user.register.success")));
             }
         }

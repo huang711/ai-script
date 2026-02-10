@@ -44,11 +44,6 @@ public class SysRegisterController extends BaseController
         String msg = registerService.register(user);
         if (StringUtils.isEmpty(msg))
         {
-            SysUser sysUser = userService.selectUserByUserName(user.getUsername());
-            if (sysUser != null)
-            {
-                workspacesService.initPersonalWorkspace(sysUser.getUserId());
-            }
             return success();
         }
         return error(msg);

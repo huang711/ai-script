@@ -72,7 +72,7 @@ public class SysLoginController
         // 自动创建个人空间
         SysUser user = userService.selectUserByUserName(loginBody.getUsername());
         if (user != null) {
-            workspacesService.initPersonalWorkspace(user.getUserId());
+            workspacesService.initUserWorkspaces(user.getUserId());
         }
 
         ajax.put(Constants.TOKEN, token);

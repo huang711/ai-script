@@ -99,24 +99,48 @@ public class WorkspacesServiceImpl implements IWorkspacesService
     }
 
     /**
-     * 初始化个人空间
+     * 初始化用户空间（个人+团队）
      * 
      * @param userId 用户ID
      */
     @Override
-    public void initPersonalWorkspace(Long userId)
+    public void initUserWorkspaces(Long userId)
     {
-        Workspaces query = new Workspaces();
-        query.setOwnerId(userId);
-        query.setType("personal");
-        List<Workspaces> list = workspacesMapper.selectWorkspacesList(query);
+        // 1. 初始化个人空间
+        Workspaces personalQuery = new Workspaces();
+        personalQuery.setOwnerId(userId);
+        personalQuery.setType("personal");
+        List<Workspaces> personalList = workspacesMapper.selectWorkspacesList(personalQuery);
         
-        if (list.isEmpty())
+        if (personalList.isEmpty())
         {
             Workspaces ws = new Workspaces();
             ws.setName("个人空间");
             ws.setOwnerId(userId);
             ws.setType("personal");
+            ws.setCreateTime(DateUtils.getNowDate());
+            workspacesMapper.insertWorkspaces(ws);
+            
+            WorkspaceMembers member = new WorkspaceMembers();
+            member.setWorkspaceId(ws.getId());
+            member.setUserId(userId);
+            member.setRole(1L); // 1=Admin
+            member.setJoinTime(DateUtils.getNowDate());
+            workspaceMembersService.insertWorkspaceMembers(member);
+        }
+
+        // 2. 初始化团队空间
+        Workspaces teamQuery = new Workspaces();
+        teamQuery.setOwnerId(userId);
+        teamQuery.setType("team");
+        List<Workspaces> teamList = workspacesMapper.selectWorkspacesList(teamQuery);
+        
+        if (teamList.isEmpty())
+        {
+            Workspaces ws = new Workspaces();
+            ws.setName("团队空间");
+            ws.setOwnerId(userId);
+            ws.setType("team");
             ws.setCreateTime(DateUtils.getNowDate());
             workspacesMapper.insertWorkspaces(ws);
             

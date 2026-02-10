@@ -58,8 +58,6 @@ export default {
     selectWorkspace(id) {
       this.workspaceId = id;
       localStorage.setItem('workspaceId', id);
-      // 也可以存入 Vuex
-      this.$store.commit('user/SET_WORKSPACE_ID', id); 
     }
   }
 };
