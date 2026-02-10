@@ -18,6 +18,9 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.drama.domain.Projects;
 import com.ruoyi.drama.service.IProjectsService;
+import com.ruoyi.common.core.context.WorkspaceContextHolder;
+import com.ruoyi.drama.domain.ProjectAsset;
+import com.ruoyi.drama.service.IProjectAssetService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
@@ -33,6 +36,9 @@ public class ProjectsController extends BaseController
 {
     @Autowired
     private IProjectsService projectsService;
+    
+    @Autowired
+    private IProjectAssetService projectAssetService;
 
     /**
      * 查询项目管理列表
@@ -45,6 +51,14 @@ public class ProjectsController extends BaseController
         List<Projects> list = projectsService.selectProjectsList(projects);
         return getDataTable(list);
     }
+    
+    @PreAuthorize("@ss.hasPermi('drama:projects:add')")
+    @Log(title = "项目资产关联", businessType = BusinessType.INSERT)
+    @PostMapping("/assets/add")
+    public AjaxResult addAsset(@RequestBody ProjectAsset projectAsset)
+    {
+        return toAjax(projectAssetService.insertProjectAsset(projectAsset));
+    }
 
     /**
      * 导出项目管理列表
@@ -54,6 +68,7 @@ public class ProjectsController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, Projects projects)
     {
+        projects.setWorkspaceId(WorkspaceContextHolder.getWorkspaceId());
         List<Projects> list = projectsService.selectProjectsList(projects);
         ExcelUtil<Projects> util = new ExcelUtil<Projects>(Projects.class);
         util.exportExcel(response, list, "项目管理数据");

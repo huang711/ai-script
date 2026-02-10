@@ -7,6 +7,11 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.drama.mapper.ProjectsMapper;
 import com.ruoyi.drama.domain.Projects;
 import com.ruoyi.drama.service.IProjectsService;
+import com.ruoyi.drama.service.IScriptsService;
+import com.ruoyi.drama.domain.Scripts;
+import com.ruoyi.common.core.context.WorkspaceContextHolder;
+import com.ruoyi.common.utils.SecurityUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 项目管理Service业务层处理
@@ -19,6 +24,9 @@ public class ProjectsServiceImpl implements IProjectsService
 {
     @Autowired
     private ProjectsMapper projectsMapper;
+
+    @Autowired
+    private IScriptsService scriptsService;
 
     /**
      * 查询项目管理
@@ -41,6 +49,7 @@ public class ProjectsServiceImpl implements IProjectsService
     @Override
     public List<Projects> selectProjectsList(Projects projects)
     {
+        projects.setWorkspaceId(WorkspaceContextHolder.getWorkspaceId());
         return projectsMapper.selectProjectsList(projects);
     }
 
@@ -51,10 +60,23 @@ public class ProjectsServiceImpl implements IProjectsService
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertProjects(Projects projects)
     {
+        projects.setWorkspaceId(WorkspaceContextHolder.getWorkspaceId());
+        projects.setCreatorId(SecurityUtils.getUserId());
         projects.setCreateTime(DateUtils.getNowDate());
-        return projectsMapper.insertProjects(projects);
+        int rows = projectsMapper.insertProjects(projects);
+        
+        // 级联创建初始剧本
+        Scripts script = new Scripts();
+        script.setProjectId(projects.getId());
+        script.setTitle("初稿");
+        script.setVersion("v1.0");
+        script.setCreateTime(DateUtils.getNowDate());
+        scriptsService.insertScripts(script);
+        
+        return rows;
     }
 
     /**

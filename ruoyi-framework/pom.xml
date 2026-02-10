@@ -59,6 +59,12 @@
             <artifactId>ruoyi-system</artifactId>
         </dependency>
 
+        <!-- 工作空间模块 -->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-workspace</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

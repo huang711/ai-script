@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.drama.mapper.ProjectAssetMapper">
+    
+    <resultMap type="ProjectAsset" id="ProjectAssetResult">
+        <result property="id"    column="id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="assetId"    column="asset_id"    />
+        <result property="usageNotes"    column="usage_notes"    />
+    </resultMap>
+
+    <sql id="selectProjectAssetVo">
+        select id, project_id, asset_id, usage_notes from project_assets
+    </sql>
+
+    <select id="selectProjectAssetList" parameterType="ProjectAsset" resultMap="ProjectAssetResult">
+        <include refid="selectProjectAssetVo"/>
+        <where>  
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="assetId != null "> and asset_id = #{assetId}</if>
+        </where>
+    </select>
+    
+    <select id="selectProjectAssetById" parameterType="Long" resultMap="ProjectAssetResult">
+        <include refid="selectProjectAssetVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertProjectAsset" parameterType="ProjectAsset" useGeneratedKeys="true" keyProperty="id">
+        insert into project_assets
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="assetId != null">asset_id,</if>
+            <if test="usageNotes != null">usage_notes,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="assetId != null">#{assetId},</if>
+            <if test="usageNotes != null">#{usageNotes},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProjectAsset" parameterType="ProjectAsset">
+        update project_assets
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="assetId != null">asset_id = #{assetId},</if>
+            <if test="usageNotes != null">usage_notes = #{usageNotes},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProjectAssetById" parameterType="Long">
+        delete from project_assets where id = #{id}
+    </delete>
+
+    <delete id="deleteProjectAssetByIds" parameterType="String">
+        delete from project_assets where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

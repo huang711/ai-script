@@ -250,10 +250,7 @@
         <module>ruoyi-common</module>
         <module>ruoyi-workspace</module>
         <module>ruoyi-assets</module>
-        <module>ruoyi-assets</module>
         <module>ruoyi-drama</module>
-        <module>ruoyi-aigc</module>
-        <module>ruoyi-finance</module>
     </modules>
     <packaging>pom</packaging>
 

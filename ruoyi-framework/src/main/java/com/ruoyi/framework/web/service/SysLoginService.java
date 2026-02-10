@@ -1,5 +1,6 @@
 package com.ruoyi.framework.web.service;
 
+import java.util.List;
 import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +28,10 @@ import com.ruoyi.framework.manager.factory.AsyncFactory;
 import com.ruoyi.framework.security.context.AuthenticationContextHolder;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.workspace.domain.WorkspaceMembers;
+import com.ruoyi.workspace.domain.Workspaces;
+import com.ruoyi.workspace.service.IWorkspaceMembersService;
+import com.ruoyi.workspace.service.IWorkspacesService;
 
 /**
  * 登录校验方法
@@ -50,6 +55,12 @@ public class SysLoginService
 
     @Autowired
     private ISysConfigService configService;
+    
+    @Autowired
+    private IWorkspacesService workspacesService;
+    
+    @Autowired
+    private IWorkspaceMembersService workspaceMembersService;
 
     /**
      * 登录验证
@@ -95,6 +106,28 @@ public class SysLoginService
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         recordLoginInfo(loginUser.getUserId());
+        WorkspaceMembers memberQuery = new WorkspaceMembers();
+        memberQuery.setUserId(loginUser.getUserId());
+        List<WorkspaceMembers> members = workspaceMembersService.selectWorkspaceMembersList(memberQuery);
+        if (members.isEmpty())
+        {
+            String nickName = loginUser.getUser().getNickName();
+            if (StringUtils.isEmpty(nickName))
+            {
+                nickName = loginUser.getUsername();
+            }
+            Workspaces workspace = new Workspaces();
+            workspace.setName(nickName + "的个人空间");
+            workspace.setOwnerId(loginUser.getUserId());
+            workspace.setType("personal");
+            workspacesService.insertWorkspaces(workspace);
+            WorkspaceMembers workspaceMember = new WorkspaceMembers();
+            workspaceMember.setWorkspaceId(workspace.getId());
+            workspaceMember.setUserId(loginUser.getUserId());
+            workspaceMember.setRole(1L);
+            workspaceMember.setJoinTime(DateUtils.getNowDate());
+            workspaceMembersService.insertWorkspaceMembers(workspaceMember);
+        }
         // 生成token
         return tokenService.createToken(loginUser);
     }
