@@ -1,20 +1,18 @@
 <template>
-  <div class="workspace-select">
-    <el-select 
-      v-model="currentWorkspace" 
-      placeholder="切换空间" 
-      size="small" 
-      style="width: 150px"
-      @change="handleChange"
-    >
-      <el-option
-        v-for="item in workspaceList"
-        :key="item.id"
-        :label="item.name"
-        :value="item.id"
-      />
-    </el-select>
-  </div>
+  <el-select 
+    v-model="workspaceId" 
+    placeholder="切换空间" 
+    size="small" 
+    class="workspace-select"
+    @change="handleWorkspaceChange"
+  >
+    <el-option
+      v-for="item in workspaceList"
+      :key="item.id"
+      :label="item.name"
+      :value="item.id"
+    />
+  </el-select>
 </template>
 
 <script>
@@ -24,31 +22,44 @@ export default {
   name: "WorkspaceSelect",
   data() {
     return {
-      currentWorkspace: null,
+      workspaceId: null,
       workspaceList: []
     };
   },
   created() {
-    this.init();
+    this.getWorkspaceList();
   },
   methods: {
-    init() {
+    getWorkspaceList() {
       listWorkspaces().then(response => {
         this.workspaceList = response.rows;
-        const savedId = localStorage.getItem("workspaceId");
-        
-        if (savedId && this.workspaceList.some(w => w.id == savedId)) {
-          this.currentWorkspace = parseInt(savedId);
+        // 初始化逻辑
+        const cachedId = localStorage.getItem('workspaceId');
+        if (cachedId) {
+          // 检查缓存ID是否在列表中 (可选，防止过期ID)
+          const exists = this.workspaceList.some(w => w.id == cachedId);
+          if (exists) {
+            this.workspaceId = parseInt(cachedId);
+          } else if (this.workspaceList.length > 0) {
+             // 缓存无效但有列表，默认选中第一个
+             this.selectWorkspace(this.workspaceList[0].id);
+          }
         } else if (this.workspaceList.length > 0) {
-          // Default to first one
-          this.currentWorkspace = this.workspaceList[0].id;
-          localStorage.setItem("workspaceId", this.currentWorkspace);
+          // 无缓存，默认选中第一个
+          this.selectWorkspace(this.workspaceList[0].id);
         }
       });
     },
-    handleChange(val) {
-      localStorage.setItem("workspaceId", val);
+    handleWorkspaceChange(val) {
+      this.selectWorkspace(val);
+      // 刷新页面以应用新的 Header
       location.reload();
+    },
+    selectWorkspace(id) {
+      this.workspaceId = id;
+      localStorage.setItem('workspaceId', id);
+      // 也可以存入 Vuex
+      this.$store.commit('user/SET_WORKSPACE_ID', id); 
     }
   }
 };
@@ -56,8 +67,7 @@ export default {
 
 <style scoped>
 .workspace-select {
-  display: inline-block;
-  vertical-align: text-bottom;
-  margin-right: 20px;
+  width: 150px;
+  margin-right: 10px;
 }
 </style>

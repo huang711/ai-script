@@ -1,5 +1,6 @@
 package com.ruoyi.drama.domain;
 
+import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -55,6 +56,9 @@ public class Storyboards extends BaseEntity
 
     /** AI参数 */
     private String aiParams;
+
+    /** 关联素材ID列表 */
+    private List<Long> refAssetIds;
 
     public void setId(Long id) 
     {
@@ -174,6 +178,16 @@ public class Storyboards extends BaseEntity
     public String getAiParams() 
     {
         return aiParams;
+    }
+
+    public void setRefAssetIds(List<Long> refAssetIds)
+    {
+        this.refAssetIds = refAssetIds;
+    }
+
+    public List<Long> getRefAssetIds()
+    {
+        return refAssetIds;
     }
 
     @Override

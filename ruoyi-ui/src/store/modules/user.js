@@ -13,7 +13,8 @@ const user = {
     nickName: '',
     avatar: '',
     roles: [],
-    permissions: []
+    permissions: [],
+    workspaceId: ''
   },
 
   mutations: {
@@ -22,6 +23,9 @@ const user = {
     },
     SET_ID: (state, id) => {
       state.id = id
+    },
+    SET_WORKSPACE_ID: (state, workspaceId) => {
+      state.workspaceId = workspaceId
     },
     SET_NAME: (state, name) => {
       state.name = name

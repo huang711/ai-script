@@ -91,7 +91,7 @@ export default {
         code: [{ required: true, trigger: "change", message: "请输入验证码" }]
       },
       loading: false,
-      // 验证码开关
+      // 验证码开关开启
       captchaEnabled: true,
       // 注册开关
       register: true,

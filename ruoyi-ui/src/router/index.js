@@ -87,6 +87,26 @@ export const constantRoutes = [
         meta: { title: '个人中心', icon: 'user' }
       }
     ]
+  },
+  {
+    path: '/studio',
+    component: () => import('@/layout/components/LayoutStudio'),
+    redirect: '/studio/dashboard',
+    hidden: true,
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('@/views/studio/dashboard/index'),
+        name: 'StudioDashboard',
+        meta: { title: '工作台', icon: 'dashboard' }
+      },
+      {
+        path: 'project/:id',
+        component: () => import('@/views/error/404'),
+        name: 'StudioProject',
+        meta: { title: '项目编辑' }
+      }
+    ]
   }
 ]
 
