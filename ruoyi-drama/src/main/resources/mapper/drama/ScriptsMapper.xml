@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.drama.mapper.ScriptsMapper">
+    
+    <resultMap type="Scripts" id="ScriptsResult">
+        <result property="id"    column="id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="title"    column="title"    />
+        <result property="version"    column="version"    />
+        <result property="content"    column="content"    />
+        <result property="parsedStructure"    column="parsed_structure"    />
+    </resultMap>
+
+    <sql id="selectScriptsVo">
+        select id, project_id, title, version, content, parsed_structure from scripts
+    </sql>
+
+    <select id="selectScriptsList" parameterType="Scripts" resultMap="ScriptsResult">
+        <include refid="selectScriptsVo"/>
+        <where>  
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="parsedStructure != null  and parsedStructure != ''"> and parsed_structure = #{parsedStructure}</if>
+        </where>
+    </select>
+    
+    <select id="selectScriptsById" parameterType="Long" resultMap="ScriptsResult">
+        <include refid="selectScriptsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertScripts" parameterType="Scripts" useGeneratedKeys="true" keyProperty="id">
+        insert into scripts
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="version != null">version,</if>
+            <if test="content != null">content,</if>
+            <if test="parsedStructure != null">parsed_structure,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="version != null">#{version},</if>
+            <if test="content != null">#{content},</if>
+            <if test="parsedStructure != null">#{parsedStructure},</if>
+         </trim>
+    </insert>
+
+    <update id="updateScripts" parameterType="Scripts">
+        update scripts
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="parsedStructure != null">parsed_structure = #{parsedStructure},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteScriptsById" parameterType="Long">
+        delete from scripts where id = #{id}
+    </delete>
+
+    <delete id="deleteScriptsByIds" parameterType="String">
+        delete from scripts where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

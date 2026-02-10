@@ -231,6 +231,13 @@
                 <artifactId>ruoyi-assets</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
+
+            <!--剧本与创作模块-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ruoyi-drama</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -244,6 +251,9 @@
         <module>ruoyi-workspace</module>
         <module>ruoyi-assets</module>
         <module>ruoyi-assets</module>
+        <module>ruoyi-drama</module>
+        <module>ruoyi-aigc</module>
+        <module>ruoyi-finance</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.drama.mapper.StoryboardsMapper">
+    
+    <resultMap type="Storyboards" id="StoryboardsResult">
+        <result property="id"    column="id"    />
+        <result property="episodeId"    column="episode_id"    />
+        <result property="shotNum"    column="shot_num"    />
+        <result property="description"    column="description"    />
+        <result property="dialogue"    column="dialogue"    />
+        <result property="cameraMovement"    column="camera_movement"    />
+        <result property="duration"    column="duration"    />
+        <result property="imageFileId"    column="image_file_id"    />
+        <result property="videoFileId"    column="video_file_id"    />
+        <result property="audioFileId"    column="audio_file_id"    />
+        <result property="prompt"    column="prompt"    />
+        <result property="aiParams"    column="ai_params"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectStoryboardsVo">
+        select id, episode_id, shot_num, description, dialogue, camera_movement, duration, image_file_id, video_file_id, audio_file_id, prompt, ai_params, create_time from storyboards
+    </sql>
+
+    <select id="selectStoryboardsList" parameterType="Storyboards" resultMap="StoryboardsResult">
+        <include refid="selectStoryboardsVo"/>
+        <where>  
+            <if test="episodeId != null "> and episode_id = #{episodeId}</if>
+            <if test="shotNum != null "> and shot_num = #{shotNum}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+        </where>
+    </select>
+    
+    <select id="selectStoryboardsById" parameterType="Long" resultMap="StoryboardsResult">
+        <include refid="selectStoryboardsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertStoryboards" parameterType="Storyboards" useGeneratedKeys="true" keyProperty="id">
+        insert into storyboards
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="episodeId != null">episode_id,</if>
+            <if test="shotNum != null">shot_num,</if>
+            <if test="description != null">description,</if>
+            <if test="dialogue != null">dialogue,</if>
+            <if test="cameraMovement != null">camera_movement,</if>
+            <if test="duration != null">duration,</if>
+            <if test="imageFileId != null">image_file_id,</if>
+            <if test="videoFileId != null">video_file_id,</if>
+            <if test="audioFileId != null">audio_file_id,</if>
+            <if test="prompt != null">prompt,</if>
+            <if test="aiParams != null">ai_params,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="episodeId != null">#{episodeId},</if>
+            <if test="shotNum != null">#{shotNum},</if>
+            <if test="description != null">#{description},</if>
+            <if test="dialogue != null">#{dialogue},</if>
+            <if test="cameraMovement != null">#{cameraMovement},</if>
+            <if test="duration != null">#{duration},</if>
+            <if test="imageFileId != null">#{imageFileId},</if>
+            <if test="videoFileId != null">#{videoFileId},</if>
+            <if test="audioFileId != null">#{audioFileId},</if>
+            <if test="prompt != null">#{prompt},</if>
+            <if test="aiParams != null">#{aiParams},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStoryboards" parameterType="Storyboards">
+        update storyboards
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="episodeId != null">episode_id = #{episodeId},</if>
+            <if test="shotNum != null">shot_num = #{shotNum},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="dialogue != null">dialogue = #{dialogue},</if>
+            <if test="cameraMovement != null">camera_movement = #{cameraMovement},</if>
+            <if test="duration != null">duration = #{duration},</if>
+            <if test="imageFileId != null">image_file_id = #{imageFileId},</if>
+            <if test="videoFileId != null">video_file_id = #{videoFileId},</if>
+            <if test="audioFileId != null">audio_file_id = #{audioFileId},</if>
+            <if test="prompt != null">prompt = #{prompt},</if>
+            <if test="aiParams != null">ai_params = #{aiParams},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStoryboardsById" parameterType="Long">
+        delete from storyboards where id = #{id}
+    </delete>
+
+    <delete id="deleteStoryboardsByIds" parameterType="String">
+        delete from storyboards where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
