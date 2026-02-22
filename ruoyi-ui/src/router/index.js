@@ -105,6 +105,12 @@ export const constantRoutes = [
         component: () => import('@/views/studio/editor/index'),
         name: 'StudioEditor',
         meta: { title: '项目编辑器', icon: 'edit' }
+      },
+      {
+        path: 'storyboard/:episodeId',
+        component: () => import('@/views/studio/storyboard/index'),
+        name: 'StudioStoryboard',
+        meta: { title: '分镜编辑器', icon: 'edit' }
       }
     ]
   }

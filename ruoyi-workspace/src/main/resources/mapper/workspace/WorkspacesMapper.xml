@@ -23,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="id != null "> and id = #{id}</if>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="ownerId != null "> and owner_id = #{ownerId}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
         </where>
     </select>
     
